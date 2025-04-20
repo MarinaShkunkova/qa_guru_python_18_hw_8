@@ -57,7 +57,11 @@ class Cart:
         """
         Метод удаления продукта из корзины.
         """
-        if remove_count is None or remove_count >= self.products[product]:
+        if self.products == {}:
+            raise ValueError('В корзине отсутствуют товары')
+        elif product not in self.products:
+            raise ValueError(f'Товар с наименованием {product.name} отсутствует в корзине')
+        elif remove_count is None or remove_count >= self.products[product]:
             del self.products[product]
         else:
             self.products[product] -= remove_count
@@ -87,10 +91,8 @@ class Cart:
             raise ValueError("Корзина пуста. Пожалуйста, положите в неё товары")
 
         for product, quantity in self.products.items():
-            if product.quantity < quantity:
+            if not product.check_quantity(quantity):
                 raise ValueError(f'Отсутствует нужное количество товара с наименованием {product.name}')
-
-        for product, quantity in self.products.items():
             product.buy(quantity)
 
         self.clear()

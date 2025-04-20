@@ -41,7 +41,7 @@ class TestProducts:
 
 class TestCart:
 
-    def test_cart_add_product_product_in_cart(self, cart, product_book):
+    def test_cart_add_product_in_cart(self, cart, product_book):
         cart.add_product(product_book, 2)
         assert product_book in cart.products
 
@@ -77,10 +77,33 @@ class TestCart:
         assert product_book not in cart.products
         assert product_pen in cart.products
 
+    # удалить товаров больше, чем есть в корзине
+    def test_cart_remove_more_products_then_exist(self, cart, product_book):
+        cart.add_product(product_book, 2)
+        cart.remove_product(product_book, 3)
+        assert product_book not in cart.products
+
+    # удалить товар, без указания количества для удаления
+    def test_cart_remove_products_without_remove_count(self, cart, product_book):
+        cart.add_product(product_book, 2)
+        cart.remove_product(product_book)
+        assert product_book not in cart.products
+
+    # удалить товар, которого нет в корзине
+    def test_cart_remove_products_in_empty_cart(self, cart, product_book, product_pen):
+        cart.add_product(product_book, 2)
+        with pytest.raises(ValueError, match="Товар с наименованием pen отсутствует в корзине"):
+            cart.remove_product(product_pen)
+
+    # удалить товар когда корзина пуста
+    def test_cart_remove_products_in_empty_cart(self, cart, product_book):
+        with pytest.raises(ValueError, match="В корзине отсутствуют товары"):
+            cart.remove_product(product_book)
+
     def test_cart_clear(self, cart, product_book):
         cart.add_product(product_book, 2)
         cart.clear()
-        assert product_book not in cart.products
+        assert cart.products == {}
 
     def test_cart_get_total_price(self, cart, product_book, product_pen):
         cart.add_product(product_book, 2)
