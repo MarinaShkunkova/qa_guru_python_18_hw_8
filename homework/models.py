@@ -55,7 +55,7 @@ class Cart:
 
     def remove_product(self, product: Product, remove_count=None):
         """
-        Метод удаления продукта из корзины.
+        Метод удаления продукта из корзины
         """
         if self.products == {}:
             raise ValueError('В корзине отсутствуют товары')

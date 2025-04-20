@@ -90,7 +90,7 @@ class TestCart:
         assert product_book not in cart.products
 
     # удалить товар, которого нет в корзине
-    def test_cart_remove_products_in_empty_cart(self, cart, product_book, product_pen):
+    def test_cart_remove_products_that_not_in_cart(self, cart, product_book, product_pen):
         cart.add_product(product_book, 2)
         with pytest.raises(ValueError, match="Товар с наименованием pen отсутствует в корзине"):
             cart.remove_product(product_pen)
